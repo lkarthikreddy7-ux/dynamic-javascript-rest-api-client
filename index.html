@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A dynamic product explorer demonstrating async REST API requests, filtering, sorting, caching, and error handling.">
+  <title>Marketly — Dynamic API Client</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to products</a>
+<header class="topbar">
+  <a class="brand" href="#" aria-label="Marketly home"><span class="brand-mark" aria-hidden="true">m</span><span>marketly<span class="brand-light"> / discover</span></span></a>
+  <nav class="top-links" aria-label="Main navigation"><a href="#catalog" aria-current="page">Discover</a><a href="#saved">Saved</a></nav>
+  <div class="top-actions"><button id="theme-toggle" class="icon-button" type="button" aria-pressed="false" aria-label="Switch to dark theme">◐</button><button id="cart-button" class="cart-button" type="button" aria-label="Cart, 0 items">Cart <span id="cart-count" class="cart-count">0</span></button></div>
+</header>
+<main id="main" class="page">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-copy"><p class="eyebrow">YOUR NEXT FIND IS HERE</p><h1 id="hero-title">Good things.<br><span>Great discoveries.</span></h1><p>Explore everyday essentials from a live product catalogue. Search, sort, save, and add your favourites to the cart.</p><a href="#catalog" class="hero-link">Explore the collection <span aria-hidden="true">↘</span></a></div>
+    <div class="hero-art" aria-hidden="true"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="art-card art-card-back">fresh<br>finds</div><div class="art-card art-card-front"><span>✳</span><strong>Made for<br>your everyday</strong><small>THE DAILY EDIT · 2026</small></div></div>
+  </section>
+
+  <section id="catalog" class="catalog" aria-labelledby="catalog-title">
+    <div class="section-heading"><div><p class="eyebrow">CURATED FOR YOU</p><h2 id="catalog-title">Explore products</h2><p class="muted">Live catalogue · Fake Store API</p></div><button id="refresh-button" class="button button-outline" type="button">↻ Refresh</button></div>
+    <div class="toolbar">
+      <div class="search-field"><label class="sr-only" for="search-input">Search products</label><span aria-hidden="true">⌕</span><input id="search-input" type="search" placeholder="Search products..." autocomplete="off"><kbd>/</kbd></div>
+      <div class="filter-controls"><div class="select-field"><label for="category-filter">Category</label><select id="category-filter"><option value="all">All categories</option></select></div><div class="select-field"><label for="sort-select">Sort by</label><select id="sort-select"><option value="featured">Featured</option><option value="price-asc">Price: low to high</option><option value="price-desc">Price: high to low</option><option value="rating-desc">Top rated</option><option value="title-asc">Name: A–Z</option></select></div></div>
+    </div>
+    <div id="category-tabs" class="category-tabs" aria-label="Quick category filters"><button class="category-chip is-active" type="button" data-category="all" aria-pressed="true">All items</button></div>
+    <div id="status-message" class="status-message" role="status" aria-live="polite">Loading the latest products…</div>
+    <div id="error-banner" class="error-banner" role="alert" hidden><div><strong>We couldn’t load the catalogue.</strong><p id="error-text">Check your connection and try again.</p></div><button id="retry-button" class="button button-outline" type="button">Try again</button></div>
+    <div id="skeleton-grid" class="product-grid" aria-label="Loading products"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div>
+    <div id="product-grid" class="product-grid" aria-label="Products" hidden></div>
+    <div id="empty-state" class="empty-state" hidden><span aria-hidden="true">⌕</span><h3>No products found</h3><p>Try a different search or category.</p><button id="clear-filters" class="button button-outline" type="button">Clear filters</button></div>
+    <div class="catalog-footer"><p id="result-count" class="muted">Preparing products…</p><button id="load-more" class="button button-dark" type="button" hidden>Load more products</button></div>
+  </section>
+
+  <section id="saved" class="saved-section" aria-labelledby="saved-title"><div class="section-heading"><div><p class="eyebrow">KEEP YOUR FAVOURITES</p><h2 id="saved-title">Saved items <span id="saved-count" class="count-badge">0</span></h2><p class="muted">Saved locally on this device.</p></div></div><div id="saved-list" class="saved-list"><p class="muted">Save a product with the heart button to see it here.</p></div></section>
+  <footer class="footer"><a class="brand footer-brand" href="#"><span class="brand-mark" aria-hidden="true">m</span><span>marketly</span></a><p>Demo storefront powered by a public product API.</p><a href="README.md">Project documentation</a></footer>
+</main>
+<dialog id="cart-dialog" class="product-dialog cart-dialog" aria-labelledby="cart-dialog-title">
+  <button class="dialog-close icon-button" type="button" id="cart-dialog-close" aria-label="Close cart">×</button>
+  <div class="cart-dialog-content">
+    <p class="eyebrow">YOUR SELECTION</p>
+    <h2 id="cart-dialog-title">Your cart</h2>
+    <div id="cart-items" class="cart-items"></div>
+    <div class="cart-summary"><span>Total</span><strong id="cart-total">$0.00</strong></div>
+    <p class="muted cart-note">Demo checkout only — no payment will be collected.</p>
+    <div class="dialog-actions"><button class="button button-outline" type="button" id="continue-shopping">Continue shopping</button><button class="button button-dark" type="button" id="clear-cart">Clear cart</button></div>
+  </div>
+</dialog>
+<dialog id="product-dialog" class="product-dialog" aria-labelledby="dialog-product-title"><button class="dialog-close icon-button" type="button" aria-label="Close product details">×</button><div id="dialog-content"></div></dialog>
+<div id="announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>
